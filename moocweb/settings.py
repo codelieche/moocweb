@@ -1,3 +1,4 @@
+# _*_ coding:utf-8 _*_
 """
 Django settings for moocweb project.
 
@@ -39,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account'
 ]
+
+# 注册用户系统使用哪个模型，注意不需要是account.models.UserProfile
+AUTH_USER_MODEL = 'account.UserProfile'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
