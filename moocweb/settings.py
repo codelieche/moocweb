@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'courses',
+    'oraganization',
 ]
 
 # 注册用户系统使用哪个模型，注意不需要是account.models.UserProfile
