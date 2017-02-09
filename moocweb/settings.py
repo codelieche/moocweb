@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account',
     'courses',
     'oraganization',
+    'operation'
 ]
 
 # 注册用户系统使用哪个模型，注意不需要是account.models.UserProfile
