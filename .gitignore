@@ -6,3 +6,4 @@
 .python-version
 __pycache__
 db.sqlite3
+migrations

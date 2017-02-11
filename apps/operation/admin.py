@@ -28,7 +28,7 @@ class UserMessageAdmin(admin.ModelAdmin):
     '''用户消息管理Admin'''
     list_display = ['user', 'message', 'has_read', 'add_time']
     search_fields = ['message', 'user']
-    list_filter =['has_read', 'add_time', 'user']
+    list_filter = ['has_read', 'add_time', 'user']
 
 class UserCourseAdmin(admin.ModelAdmin):
     '''用户课程管理Admin'''
