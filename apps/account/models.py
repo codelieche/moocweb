@@ -41,11 +41,12 @@ class EmailVerifyRecord(models.Model):
     )
     code = models.CharField(max_length=20, verbose_name='验证码')
     email = models.EmailField(max_length=50, verbose_name="邮箱")
-    send_type = models.CharField(max_length=10, choices=EMAIL_SEND_TYPE)
-    send_time = models.DateTimeField(default=datetime.now)
+    send_type = models.CharField(max_length=10, choices=EMAIL_SEND_TYPE,
+                                 verbose_name="验证码类型")
+    send_time = models.DateTimeField(default=datetime.now, verbose_name="发送时间")
 
     def __str__(self):
-        return self.code
+        return '{0}({1})'.format(self.code, self.email)
 
     class Meta:
         verbose_name = '邮箱验证码'
