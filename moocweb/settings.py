@@ -125,7 +125,8 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# 数据库中保存为UTC时间
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

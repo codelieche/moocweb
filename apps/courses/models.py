@@ -29,33 +29,42 @@ class Course(models.Model):
     click_nums = models.IntegerField(default=0, verbose_name="点击数")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "课程"
         verbose_name_plural = verbose_name
 
-
+@python_2_unicode_compatible
 class Lesson(models.Model):
     '''章节信息Model'''
     course = models.ForeignKey(Course, verbose_name="课程")
     name = models.CharField(max_length=100, verbose_name="章节名")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "章节"
         verbose_name_plural = verbose_name
 
-
+@python_2_unicode_compatible
 class Video(models.Model):
     '''视频Model'''
     lesson = models.ForeignKey(Lesson, verbose_name="章节")
     name = models.CharField(max_length=100, verbose_name="视频名")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "视频"
         verbose_name_plural = verbose_name
 
-
+@python_2_unicode_compatible
 class CourseResource(models.Model):
     '''课程资源Model'''
     course = models.ForeignKey(Course, verbose_name="课程")
@@ -63,6 +72,9 @@ class CourseResource(models.Model):
     download = models.FileField(upload_to="course/resource/%Y/%m", verbose_name="资源文件",
                                 max_length=100)
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = "课程资源"
