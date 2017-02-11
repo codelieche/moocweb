@@ -6,7 +6,9 @@ from .models import UserProfile, EmailVerifyRecord, Banner
 # Register your models here.
 
 class UserProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['username', 'email', 'is_active']
+    search_fields = ['username', 'email']
+    list_filter = ['is_active']
 
 class EmailVerifyRecordAdmin(admin.ModelAdmin):
     list_display = ['code', 'email', 'send_type', 'send_time']

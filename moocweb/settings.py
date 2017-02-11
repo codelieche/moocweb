@@ -48,6 +48,10 @@ INSTALLED_APPS = [
 
 # 注册用户系统使用哪个模型，注意不需要是account.models.UserProfile
 AUTH_USER_MODEL = 'account.UserProfile'
+# 自定义后台auth认证方法
+AUTHENTICATION_BACKENDS = (
+    'account.views.CustomBackend',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
