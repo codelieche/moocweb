@@ -6,8 +6,10 @@ from django.db.models import Q
 from django.views.generic.base import View
 
 from .models import UserProfile
+from .forms import LoginForm
 
 # Create your views here.
+
 
 class CustomBackend(ModelBackend):
     '''自定义user后台认证'''
@@ -29,14 +31,17 @@ class LoginView(View):
 
     def post(self, request):
         '''用户登陆Post'''
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return render(request, 'index.html')
-        else:
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return render(request, 'index.html')
             return render(request, 'login.html', {"msg": "用户名或者密码错误"})
+        else:
+            return render(request, 'login.html', {"login_form": login_form})
 
 def user_logout(request):
     logout(request)
