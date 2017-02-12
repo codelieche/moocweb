@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth import  authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
+from django.views.generic.base import View
 
 from .models import UserProfile
 
@@ -21,9 +22,13 @@ class CustomBackend(ModelBackend):
         except Exception as e:
             return None
 
-def user_login(request):
-    '''用户登陆'''
-    if request.method == "POST":
+class LoginView(View):
+    '''用户登陆View'''
+    def get(self, request):
+        return render(request, 'login.html')
+
+    def post(self, request):
+        '''用户登陆Post'''
         username = request.POST.get('username', '')
         password = request.POST.get('password', '')
         user = authenticate(username=username, password=password)
@@ -32,8 +37,6 @@ def user_login(request):
             return render(request, 'index.html')
         else:
             return render(request, 'login.html', {"msg": "用户名或者密码错误"})
-    elif request.method == "GET":
-        return render(request, 'login.html', {})
 
 def user_logout(request):
     logout(request)
