@@ -4,9 +4,10 @@ from django.contrib.auth import  authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 from django.views.generic.base import View
+from django.contrib.auth.hashers import mask_hash
 
 from .models import UserProfile
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 
 # Create your views here.
 
@@ -46,3 +47,26 @@ class LoginView(View):
 def user_logout(request):
     logout(request)
     return render(request, 'login.html')
+
+class RegisterView(View):
+    '''用户注册View'''
+    def get(self, request):
+        register_form = RegisterForm()
+        return render(request, 'register.html', {'register_form': register_form})
+
+    def post(self, request):
+        register_form = RegisterForm(request.POST)
+        if register_form.is_valid():
+            email = register_form.cleaned_data['email']
+            pass_word = register_form.cleaned_data['password']
+            user_profile = UserProfile()
+            user_profile.username = email
+            user_profile.email = email
+            user_profile.password = mask_hash(pass_word)
+            # user_profile.set_password(pass_word)
+            user_profile.save()
+            login(request, user_profile)
+            return render(request, 'login.html')
+
+        else:
+            return render(request, 'register.html', {'register_form': register_form})
