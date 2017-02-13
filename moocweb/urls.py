@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^logout/$', account_views.user_logout, name='logout'),
     url(r'^register/$', account_views.RegisterView.as_view(), name='register'),
     url(r'^captcha/', include('captcha.urls')),
+    url('^active/(?P<active_code>.*)/$', account_views.ActiveUserView.as_view(), name="active")
 ]

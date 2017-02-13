@@ -1,5 +1,5 @@
 # _*_ coding:utf-8 _*_
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import  authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
@@ -7,7 +7,7 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import mask_hash
 
 from utils.email_send import send_register_email
-from .models import UserProfile
+from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm
 
 
@@ -66,9 +66,36 @@ class RegisterView(View):
             user_profile.email = email
             user_profile.password = mask_hash(pass_word)
             # user_profile.set_password(pass_word)
+            # 点击邮箱中的激活链接，is_active才变成True
+            user_profile.is_active = False
             user_profile.save()
-            login(request, user_profile)
+
+            # 发送验证邮件
+            send_register_email(email, "register")
+            # login(request, user_profile)
             return render(request, 'login.html')
 
         else:
             return render(request, 'register.html', {'register_form': register_form})
+
+class ActiveUserView(View):
+    '''用户激活View'''
+    def get(self, request, active_code):
+        # 查询记录是否存在
+        all_records = EmailVerifyRecord.objects.filter(code=active_code)
+        if all_records:
+            for record in all_records:
+                email = record.email
+                user = UserProfile.objects.get(email=email)
+
+                # 激活并登陆账号
+                user.is_active = True
+                user.save()
+                ## 这里还需要控制 再次点击active的链接
+                login(request, user)
+
+                # 跳转去首页
+                return redirect('index')
+        else:
+            # 没查询到激活链接
+            return redirect('register')

@@ -32,7 +32,7 @@ def send_register_email(email, send_type='register'):
     if send_type == "register":
         email_title = "mooc在线注册激活链接"
         email_body = "请点击下面的链接激活你的账号:http://127.0.0.1:8000/" \
-                     "active{0}".format(email_record.code)
+                     "active/{0}".format(email_record.code)
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
         if send_status:
             print(send_status)# 1
