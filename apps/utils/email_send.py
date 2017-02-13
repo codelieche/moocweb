@@ -35,6 +35,6 @@ def send_register_email(email, send_type='register'):
                      "active{0}".format(email_record.code)
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
         if send_status:
-            pass
-        
+            print(send_status)# 1
+
 

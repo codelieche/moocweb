@@ -144,9 +144,10 @@ STATICFILES_DIRS = (
 )
 
 # 邮件发送配置
-EMAIL_HOST = "smtp.sina.com"
+EMAIL_HOST = "smtp.mxhichina.com"
 EMAIL_PORT = 25
-EMAIL_HOST_USER= ""
-EMAIL_HOST_PASSWORD= ""
+EMAIL_HOST_USER= "admin@codelieche.com"
+# 配置环境变量，设置成阿里云企业邮箱 发送邮件
+EMAIL_HOST_PASSWORD= os.environ.get('ALIYUN_EMAIL_PASSWORD', '')
 EMAIL_USE_TLS = False
-EMAIL_FROM = ""
+EMAIL_FROM = "admin@codelieche.com"

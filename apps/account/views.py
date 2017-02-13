@@ -6,8 +6,10 @@ from django.db.models import Q
 from django.views.generic.base import View
 from django.contrib.auth.hashers import mask_hash
 
+from utils.email_send import send_register_email
 from .models import UserProfile
 from .forms import LoginForm, RegisterForm
+
 
 # Create your views here.
 
