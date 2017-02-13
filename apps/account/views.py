@@ -40,8 +40,12 @@ class LoginView(View):
             password = login_form.cleaned_data['password']
             user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
-                return render(request, 'index.html')
+                # 对user是否激活进行判断
+                if user.is_active:
+                    login(request, user)
+                    return render(request, 'index.html')
+                else:
+                    return render(request, 'login.html', {'msg': "用户还没激活"})
             return render(request, 'login.html', {"msg": "用户名或者密码错误"})
         else:
             return render(request, 'login.html', {"login_form": login_form})
