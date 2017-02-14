@@ -108,4 +108,5 @@ class ActiveUserView(View):
                 return redirect('index')
         else:
             # 没查询到激活链接
-            return redirect('register')
+            # return redirect('register')
+            return render(request, 'active_fail.html')
