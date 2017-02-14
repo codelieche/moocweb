@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import mask_hash
 
 from utils.email_send import send_register_email
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, ForgetPasswordForm
 
 
 # Create your views here.
@@ -110,3 +110,22 @@ class ActiveUserView(View):
             # 没查询到激活链接
             # return redirect('register')
             return render(request, 'active_fail.html')
+
+class ForgetPasswordView(View):
+    '''忘记密码View'''
+    def get(self, request):
+        forget_form = ForgetPasswordForm()
+        return render(request, 'forgetpwd.html', {"forget_form": forget_form})
+
+    def post(self, request):
+        forget_form = ForgetPasswordForm(request.POST)
+        if forget_form.is_valid():
+            email = forget_form.cleaned_data['email']
+            # 发送忘记密码 验证邮箱
+            send_register_email(email, 'forget')
+            return render(request, 'send_success.html')
+        else:
+            return render(request, 'forgetpwd.html', {'forget_form': forget_form})
+
+
+
