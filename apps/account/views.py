@@ -64,6 +64,12 @@ class RegisterView(View):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             email = register_form.cleaned_data['email']
+            ## 需要判断email是否存在
+            if UserProfile.objects.filter(email=email):
+                return render(request, 'register.html',
+                              {'register_form': register_form,
+                               'msg': 'Email已经注册，请更换'})
+
             pass_word = register_form.cleaned_data['password']
             user_profile = UserProfile()
             user_profile.username = email
