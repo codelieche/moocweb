@@ -22,3 +22,10 @@ class ForgetPasswordForm(forms.Form):
     email = forms.EmailField(max_length=50, required=True)
     captcha = CaptchaField(error_messages={"invalid": "验证码错误"})
 
+class ModifyPasswordForm(forms.Form):
+    '''修改密码Form'''
+    email = forms.EmailField(max_length=50, required=True)
+    password = forms.CharField(required=True, min_length=5)
+    password2 = forms.CharField(required=True, min_length=5)
+
+

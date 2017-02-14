@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'^captcha/', include('captcha.urls')),
     url(r'^active/(?P<active_code>.*)/$', account_views.ActiveUserView.as_view(), name="active"),
     url(r'^forget/', account_views.ForgetPasswordView.as_view(), name="forget_password"),
+    url(r'^reset/(?P<reset_code>.*)/$', account_views.ResetPasswordView.as_view(), name="reset_password"),
+    url(r'^modify/$', account_views.ModifyPasswordView.as_view(), name="modify_password"),
 ]

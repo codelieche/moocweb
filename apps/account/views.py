@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import mask_hash
 
 from utils.email_send import send_register_email
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetPasswordForm
+from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ModifyPasswordForm
 
 
 # Create your views here.
@@ -126,6 +126,45 @@ class ForgetPasswordView(View):
             return render(request, 'send_success.html')
         else:
             return render(request, 'forgetpwd.html', {'forget_form': forget_form})
+
+class ResetPasswordView(View):
+    '''重置密码View'''
+    def get(self, request, reset_code):
+        record = EmailVerifyRecord.objects.get(code = reset_code)
+        if record:
+            email = record.email
+            return render(request, 'password_reset.html', {"email": email})
+        else:
+            return render(request, 'active_fail.html')
+
+        return render(request, 'login.html')
+
+class ModifyPasswordView(View):
+    '''更改密码View'''
+    def post(self, request):
+        modify_form = ModifyPasswordForm(request.POST)
+        if modify_form.is_valid():
+            email = modify_form.cleaned_data['email']
+            password = modify_form.cleaned_data['password']
+            password2 = modify_form.cleaned_data['password2']
+            if password == password2:
+                user = UserProfile.objects.get(email=email)
+                if user:
+                    user.set_password(password)
+                    user.save()
+                    # 登陆且跳转到首页
+                    # login(request, user)
+                    return redirect('login')
+                else:
+                    return render(request, 'password_reset.html',
+                                  {'msg': "此email用户不存在"})
+            else:
+                return render(request, 'password_reset.html',
+                              {'email': email, 'msg': "输入的密码不相等"})
+        else:
+            return render(request, 'password_reset.html',
+                          {'email': request.POST.get('email', ''),
+                           'msg': '请重新输入'})
 
 
 
