@@ -8,9 +8,9 @@ from .models import CourseOrg, Teacher, CityDict
 
 class CourseOrgAdmin(admin.ModelAdmin):
     '''课程机构管理Model'''
-    list_display = ['name', 'desc', 'address', 'city', 'add_time']
-    search_fields = ['name', 'address', 'city']
-    list_filter = ['name', 'address', 'city', 'add_time']
+    list_display = ['name', 'category', 'desc', 'address', 'city', 'add_time']
+    search_fields = ['name', 'category', 'address', 'city']
+    list_filter = ['name', 'category', 'address', 'city', 'add_time']
 
 class TeacherAdmin(admin.ModelAdmin):
     '''教师管理Model'''
