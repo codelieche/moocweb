@@ -143,6 +143,11 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
+# 上传文件配置
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
+
+
 # 邮件发送配置
 EMAIL_HOST = "smtp.mxhichina.com"
 EMAIL_PORT = 25
