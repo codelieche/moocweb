@@ -36,3 +36,7 @@ urlpatterns = [
     # 课程机构首页
     url(r'^org_list/$', organization_views.OrgListView.as_view(), name='org_list')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# 配置media上传文件也可以使用
+# from django.views.static import serve
+# url(r'^media/(?P<path>.*)$', serve, {"document_root": settings.MEDIA_ROOT} )
