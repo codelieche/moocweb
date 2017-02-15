@@ -6,6 +6,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.encoding import python_2_unicode_compatible
 
+from utils.storage import ImageStorage
+
 # Create your models here.
 
 
@@ -23,7 +25,7 @@ class UserProfile(AbstractUser):
     address = models.CharField(max_length=100, default='')
     mobile = models.CharField(max_length=11, null=True, blank=True)
     image = models.ImageField(upload_to='image/%Y/%m', default='image/default.png',
-                              max_length=100)
+                              max_length=100, storage=ImageStorage())
 
     class Meta:
         verbose_name = "用户信息"
@@ -57,7 +59,7 @@ class Banner(models.Model):
     '''首页轮播图Model'''
     title = models.CharField(max_length=100, verbose_name="标题")
     image = models.ImageField(upload_to='banner/%Y/%M', verbose_name="轮播图",
-                              max_length=100)
+                              max_length=100, storage=ImageStorage())
     url = models.URLField(max_length=200, verbose_name='访问地址')
     index = models.IntegerField(default=100, verbose_name="顺序")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")

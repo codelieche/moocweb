@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
+from utils.storage import ImageStorage
+
 # Create your models here.
 
 
@@ -23,7 +25,7 @@ class CourseOrg(models.Model):
     click_nums = models.IntegerField(default=0, verbose_name="点击数")
     fav_nums = models.IntegerField(default=0, verbose_name="收藏数")
     image = models.ImageField(upload_to="org/%Y/%m", verbose_name="封面图",
-                              max_length=100)
+                              max_length=100, storage=ImageStorage())
     address = models.CharField(max_length=150, verbose_name="机构地址")
     city = models.ForeignKey("CityDict", verbose_name="所在城市")
     add_time = models.DateTimeField(auto_now_add=True, verbose_name="添加时间")
