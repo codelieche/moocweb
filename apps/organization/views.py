@@ -2,8 +2,11 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.core.paginator import Paginator
+from django.http import HttpResponse
 
 from .models import CourseOrg, CityDict
+from .forms import UserAskForm
+
 # Create your views here.
 
 
@@ -53,3 +56,15 @@ class OrgListView(View):
             "sort": sort,
         })
 
+
+class AddUserAskView(View):
+    def post(self, request):
+        userask_form = UserAskForm(request.POST)
+        if userask_form.is_valid():
+            userask_form.save(commit=True)
+            # 注意json数据需要是双引号的
+            return HttpResponse('{"status": "success"}',
+                                content_type="application/json")
+        else:
+            return HttpResponse('{"status": "fail", "msg": "添加出错"}',
+                                content_type="application/json")
