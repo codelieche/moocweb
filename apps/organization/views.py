@@ -82,6 +82,7 @@ class OrgHomeView(View):
                           'course_org': course_org,
                           'all_course': all_course,
                           'all_teachers': all_teachers,
+                          'current_page': 'home',
                       })
 
 class OrgCourseView(View):
@@ -93,4 +94,13 @@ class OrgCourseView(View):
                       {
                           'course_org': course_org,
                           'all_course': all_course,
+                          'current_page': 'course',
                       })
+
+class OrgDescView(View):
+    '''机构介绍View'''
+    def get(self, request, org_id):
+        course_org = CourseOrg.objects.get(id=org_id)
+        return render(request, 'org_detail_desc.html',
+                      {'course_org': course_org, 'current_page': 'desc'})
+
