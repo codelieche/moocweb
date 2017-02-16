@@ -4,6 +4,8 @@ from django.views.generic import View
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 
+from courses.models import Course
+
 from .models import CourseOrg, CityDict
 from .forms import UserAskForm
 
@@ -68,3 +70,27 @@ class AddUserAskView(View):
         else:
             return HttpResponse('{"status": "fail", "msg": "添加出错"}',
                                 content_type="application/json")
+
+class OrgHomeView(View):
+    '''机构首页View'''
+    def get(self, request, org_id):
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        all_course = course_org.course_set.all()[:3]
+        all_teachers = course_org.teacher_set.all()[:2]
+        return render(request, 'org_detail_homepage.html',
+                      {
+                          'course_org': course_org,
+                          'all_course': all_course,
+                          'all_teachers': all_teachers,
+                      })
+
+class OrgCourseView(View):
+    '''机构课程列表View'''
+    def get(self, request, org_id):
+        course_org = CourseOrg.objects.get(id=org_id)
+        all_course = course_org.course_set.all()
+        return render(request, 'org_detail_course.html',
+                      {
+                          'course_org': course_org,
+                          'all_course': all_course,
+                      })

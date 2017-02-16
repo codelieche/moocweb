@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
 from utils.storage import ImageStorage
+from organization.models import CourseOrg
 
 # Create your models here.
 
@@ -19,6 +20,8 @@ class Course(models.Model):
         ('gj', "高级")
     )
     name = models.CharField(max_length=50, verbose_name='课程名')
+    course_org = models.ForeignKey(CourseOrg, verbose_name='课程机构',
+                                   null=True, blank=True)
     desc = models.CharField(max_length=300, verbose_name="课程描述")
     detail = models.TextField(verbose_name="课程详情")
     degree = models.CharField(choices=DEGREE_CHOISES, max_length=2, default='cj',

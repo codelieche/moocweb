@@ -14,7 +14,7 @@ class CourseOrgAdmin(admin.ModelAdmin):
 
 class TeacherAdmin(admin.ModelAdmin):
     '''教师管理Model'''
-    list_display = ['name', 'org', 'work_years', 'work_position', 'points',
+    list_display = ['name', 'org', 'image', 'work_years', 'work_position', 'points',
                     'click_nums', 'fav_nums', 'add_time']
     search_fields = ['name', 'org', 'points']
     list_filter = ['org', 'work_years', 'work_position', 'add_time']
