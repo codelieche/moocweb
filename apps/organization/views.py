@@ -104,3 +104,13 @@ class OrgDescView(View):
         return render(request, 'org_detail_desc.html',
                       {'course_org': course_org, 'current_page': 'desc'})
 
+class OrgTeacherView(View):
+    '''机构教师列表View'''
+    def get(self, request, org_id):
+        course_org = CourseOrg.objects.get(id=org_id)
+        all_teachers = course_org.teacher_set.all()
+        return render(request, 'org_detail_teachers.html',
+                      {
+                          'course_org': course_org,
+                          'all_teachers': all_teachers,
+                          'current_page': 'teacher'})
