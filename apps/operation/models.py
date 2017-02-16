@@ -54,7 +54,7 @@ class UserFavorite(models.Model):
     add_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.fav_type
+        return "%s: %s->%s" % (self.user.username, self.fav_id, self.fav_type)
 
     class Meta:
         verbose_name = "用户收藏"

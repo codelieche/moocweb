@@ -10,4 +10,7 @@ urlpatterns = [
     url(r'^course/(?P<org_id>\d+)/$', views.OrgCourseView.as_view(), name="org_course"),
     url(r'^desc/(?P<org_id>\d+)/$', views.OrgDescView.as_view(), name="org_desc"),
     url(r'^teacher/(?P<org_id>\d+)/$', views.OrgTeacherView.as_view(), name="org_teacher"),
+
+    # 机构收藏
+    url(r'^add_fav/$', views.AddFavView.as_view(), name="add_fav"),
 ]
