@@ -78,7 +78,7 @@ class Lesson(models.Model):
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     def __str__(self):
-        return self.name
+        return '{0}:=> {1}'.format(self.course.name, self.name)
 
     class Meta:
         verbose_name = "章节"
@@ -89,6 +89,7 @@ class Video(models.Model):
     '''视频Model'''
     lesson = models.ForeignKey(Lesson, verbose_name="章节")
     name = models.CharField(max_length=100, verbose_name="视频名")
+    url = models.CharField(max_length=200, default="", verbose_name="访问链接")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     def __str__(self):
