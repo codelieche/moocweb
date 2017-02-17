@@ -40,6 +40,7 @@ class Course(models.Model):
     )
     name = models.CharField(max_length=50, verbose_name='课程名')
     category = models.ForeignKey(Category, verbose_name="课程类别")
+    tags = models.ManyToManyField('Tag', verbose_name="标签")
     course_org = models.ForeignKey(CourseOrg, verbose_name='课程机构',
                                    null=True, blank=True)
     desc = models.CharField(max_length=300, verbose_name="课程描述")
@@ -114,3 +115,15 @@ class CourseResource(models.Model):
         verbose_name_plural = verbose_name
 
 
+@python_2_unicode_compatible
+class Tag(models.Model):
+    '''课程标签'''
+    name = models.CharField(max_length=20, verbose_name="标签", unique=True)
+    add_time = models.DateTimeField(auto_now_add=True, verbose_name="添加时间")
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.lower()
+        super(Tag, self).save(*args, **kwargs)
