@@ -1,14 +1,20 @@
 # _*_ coding:utf-8 _*_
 from django.contrib import admin
 
-from .models import Course, Lesson, Video, CourseResource
+from .models import Category, Course, Lesson, Video, CourseResource
 
 # Register your models here.
 
+class CategoryAdmin(admin.ModelAdmin):
+    '''课程分类ModelAdmin'''
+    list_display = ['parent', 'name', 'add_time']
+    search_fields = ['parent', 'name']
+    list_filter = ['parent', 'add_time']
+
 class CourseAdmin(admin.ModelAdmin):
     '''Course管理Model'''
-    list_display = ['name', 'desc', 'detail', 'degree', 'students', 'fav_nums', 'image', 'add_time']
-    search_fields = ['name', 'detail', 'degree']
+    list_display = ['name', 'category', 'desc', 'detail', 'degree', 'students', 'fav_nums', 'image', 'add_time']
+    search_fields = ['name', 'category', 'detail', 'degree']
     list_filter = ['degree', 'add_time']
 
 
@@ -30,6 +36,7 @@ class CourseResourceAdmin(admin.ModelAdmin):
     search_fields = ['course', 'name', 'download']
     list_filter = ['course', 'add_time']
 
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Video, VideoAdmin)

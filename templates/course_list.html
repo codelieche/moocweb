@@ -34,7 +34,7 @@
 					<div class="group_list">
                         {% for course in all_courses %}
                             <div class="box">
-                                <a href="course-detail.html">
+                                <a href="{% url 'course:course_detail' course.id %}">
                                     <img width="280" height="350" class="scrollLoading" src="/media/{{ course.image }}"/>
                                 </a>
                                 <div class="des">

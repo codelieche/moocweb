@@ -1,5 +1,5 @@
 # _*_ coding:utf-8 _*_
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
 from django.core.paginator import Paginator
 from .models import Course
@@ -39,4 +39,17 @@ class CourseListView(View):
             "page_num_list": range(1, p.num_pages + 1),
             'sort': sort,
             'hot_courses': hot_courses,
+        })
+
+
+class CourseDetailView(View):
+    '''
+    课程详情页View
+    '''
+    def get(self, request, course_id):
+        course = get_object_or_404(Course, id=course_id)
+        course.click_nums += 1
+        course.save(update_fields=['click_nums'])
+        return render(request, 'course_detail.html',{
+            'course': course,
         })

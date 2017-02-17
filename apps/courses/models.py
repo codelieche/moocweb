@@ -12,6 +12,25 @@ from organization.models import CourseOrg
 
 
 @python_2_unicode_compatible
+class Category(models.Model):
+    '''课程分类Model'''
+    name = models.CharField(max_length=50, verbose_name="课程分类")
+    parent = models.ForeignKey('self', null=True, blank=True, verbose_name="上级分类")
+    add_time = models.DateTimeField(auto_created=True, verbose_name="添加时间")
+
+    def __str__(self):
+        if self.parent:
+            return '{0}/{1}'.format(self.parent.name, self.name)
+        else:
+            return self.name
+
+    class Meta:
+        verbose_name = "类别"
+        verbose_name_plural = verbose_name
+
+
+
+@python_2_unicode_compatible
 class Course(models.Model):
     '''课程基本信息Model'''
     DEGREE_CHOISES = (
@@ -20,6 +39,7 @@ class Course(models.Model):
         ('gj', "高级")
     )
     name = models.CharField(max_length=50, verbose_name='课程名')
+    category = models.ForeignKey(Category, verbose_name="课程类别")
     course_org = models.ForeignKey(CourseOrg, verbose_name='课程机构',
                                    null=True, blank=True)
     desc = models.CharField(max_length=300, verbose_name="课程描述")
@@ -36,6 +56,14 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_zj_nums(self):
+        '''获取课程章节数'''
+        return self.lesson_set.count()
+
+    def get_learn_users(self):
+        '''获取学生数'''
+        return self.usercourse_set.all()[:5]
 
     class Meta:
         verbose_name = "课程"
