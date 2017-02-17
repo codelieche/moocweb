@@ -4,6 +4,7 @@ from django.views.generic.base import View
 from django.core.paginator import Paginator
 from django.db.models import Count
 
+from operation.models import UserFavorite
 from .models import Course
 
 # Create your views here.
@@ -60,7 +61,21 @@ class CourseDetailView(View):
             similar_courses = Course.objects.filter(tags__in=tags_ids).exclude(id=course_id)
             similar_courses = similar_courses.annotate(same_tags=Count('id'))\
                 .order_by('-same_tags', '-add_time')[:3]
+
+        # 是否收藏了课程 和 本机构
+        has_fav_course = False
+        has_fav_org = False
+        if  request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_id,
+                                           fav_type=1):
+                has_fav_course = True
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.course_org_id,
+                                           fav_type=2):
+                has_fav_org = True
+
         return render(request, 'course_detail.html',{
             'course': course,
             'similar_courses': similar_courses,
+            'has_fav_course': has_fav_course,
+            'has_fav_org': has_fav_org,
         })
