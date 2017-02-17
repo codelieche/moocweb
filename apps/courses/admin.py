@@ -13,7 +13,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class CourseAdmin(admin.ModelAdmin):
     '''Course管理Model'''
-    list_display = ['name', 'category', 'desc', 'detail', 'degree', 'students', 'fav_nums', 'image', 'add_time']
+    list_display = ['name', 'category', 'desc', 'detail', 'degree',
+                    'students', 'fav_nums', 'image', 'add_time',
+                    'youneed_know', 'teacher_tell']
     search_fields = ['name', 'category', 'detail', 'degree']
     list_filter = ['degree', 'add_time', 'tags']
 

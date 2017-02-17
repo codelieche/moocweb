@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Count
 
 from operation.models import UserFavorite
-from .models import Course
+from .models import Course, CourseResource
 
 # Create your views here.
 
@@ -86,6 +86,10 @@ class CourseInfoView(View):
     '''
     def get(self, request, course_id):
         course = get_object_or_404(Course, id=course_id)
+
+        # 课程资源
+        all_resources = CourseResource.objects.filter(course=course)
         return render(request, 'course_video.html',{
             'course': course,
+            'all_resources': all_resources,
         })
