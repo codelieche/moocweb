@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^modify/$', account_views.ModifyPasswordView.as_view(), name="modify_password"),
     # 添加课程机构app的urls
     url(r'^org/', include('organization.urls', namespace="org")),
+    # 课程相关url的配置
+    url(r'^course/', include('courses.urls', namespace='course')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
