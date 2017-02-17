@@ -127,3 +127,7 @@ class Tag(models.Model):
     def save(self, *args, **kwargs):
         self.name = self.name.lower()
         super(Tag, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "标签"
+        verbose_name_plural = verbose_name

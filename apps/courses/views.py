@@ -2,6 +2,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
 from django.core.paginator import Paginator
+from django.db.models import Count
+
 from .models import Course
 
 # Create your views here.
@@ -50,6 +52,15 @@ class CourseDetailView(View):
         course = get_object_or_404(Course, id=course_id)
         course.click_nums += 1
         course.save(update_fields=['click_nums'])
+
+        # 根据标签id获取相似的课程
+        tags_ids = course.tags.values_list('id', flat=True)
+        similar_courses = []
+        if tags_ids:
+            similar_courses = Course.objects.filter(tags__in=tags_ids).exclude(id=course_id)
+            similar_courses = similar_courses.annotate(same_tags=Count('id'))\
+                .order_by('-same_tags', '-add_time')[:3]
         return render(request, 'course_detail.html',{
             'course': course,
+            'similar_courses': similar_courses,
         })
