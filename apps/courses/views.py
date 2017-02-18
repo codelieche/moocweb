@@ -93,3 +93,17 @@ class CourseInfoView(View):
             'course': course,
             'all_resources': all_resources,
         })
+
+
+class CourseCommentsView(View):
+    '''课程评论View'''
+    def get(self, request, course_id):
+        course = get_object_or_404(Course, id=course_id)
+
+        # 课程资源
+        all_resources = CourseResource.objects.filter(course=course)
+
+        return render(request, 'course_comment.html', {
+            'course': course,
+            'all_resources': all_resources,
+        })
