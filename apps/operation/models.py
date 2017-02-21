@@ -83,7 +83,7 @@ class UserCourse(models.Model):
     add_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.course
+        return '{0}: {1}'.format(self.user.nick_name, self.course.name)
 
     class Meta:
         verbose_name = "用户课程"

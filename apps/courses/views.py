@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Count
 from django.http import HttpResponse
 
-from operation.models import UserFavorite, CourseComments
+from operation.models import UserFavorite, CourseComments, UserCourse
 from .models import Course, CourseResource
 
 # Create your views here.
@@ -88,11 +88,25 @@ class CourseInfoView(View):
     def get(self, request, course_id):
         course = get_object_or_404(Course, id=course_id)
 
+        ## 获取学过该课程的相关其它课程
+        # 学习这课程的所有用户
+        users_course =UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in users_course]
+        # 得到学习这个课程的所有用户id，然后查找这些用户学过的其它课程
+        ## 需要剔除课程自身
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids).\
+                             exclude(course=course)
+        course_ids =[user_course.course.id for user_course in all_user_courses]
+        relate_courses = Course.objects.filter(id__in=course_ids).\
+                             order_by("-click_nums")[:5]
+        ## 学习相关课程，算法待优化
+
         # 课程资源
         all_resources = CourseResource.objects.filter(course=course)
         return render(request, 'course_video.html',{
             'course': course,
             'all_resources': all_resources,
+            'relate_courses': relate_courses,
         })
 
 
