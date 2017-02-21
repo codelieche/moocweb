@@ -84,21 +84,24 @@
                     </div>
                     <div id="course_note">
                         <ul class="mod-post" id="comment-list">
-
-                            <li class="post-row">
-                                <div class="media">
-                                    <span target="_blank"><img src='../media/image/2016/12/default_big_14.png' width='40' height='40' /></span>
-                                </div>
-                                <div class="bd">
-                                    <div class="tit">
-                                        <span target="_blank">bobby</span>
+                            {% for comment in all_comments %}
+                                <li class="post-row">
+                                    <div class="media">
+                                        <span target="_blank">
+                                            <img src='/media/{{ comment.user.image }}' width='40' height='40' />
+                                        </span>
                                     </div>
-                                    <p class="cnt">看到第三章了，虽然有些知识还不是听得很懂，但是感觉很有用的样子，想的是先听完一遍再说。然后再来听第二遍。最后想说老师棒棒哒！！！</p>
-                                    <div class="footer clearfix">
-                                        <span title="创建时间" class="l timeago">时间：2016年12月13日 22:14</span>
+                                    <div class="bd">
+                                        <div class="tit">
+                                            <span target="_blank">{{ comment.user.username }}</span>
+                                        </div>
+                                        <p class="cnt">{{ comment.comments }}</p>
+                                        <div class="footer clearfix">
+                                            <span title="创建时间" class="l timeago">时间：{{ comment.add_time }}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                            {% endfor %}
 
 
                         </ul>

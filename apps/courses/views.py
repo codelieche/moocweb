@@ -104,9 +104,12 @@ class CourseCommentsView(View):
         # 课程资源
         all_resources = CourseResource.objects.filter(course=course)
 
+        # 课程评论
+        all_comments = CourseComments.objects.filter(course = course)
         return render(request, 'course_comment.html', {
             'course': course,
             'all_resources': all_resources,
+            'all_comments': all_comments,
         })
 
 class AddCommentView(View):
