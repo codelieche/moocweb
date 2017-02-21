@@ -3,8 +3,9 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.http import HttpResponse
 
-from operation.models import UserFavorite
+from operation.models import UserFavorite, CourseComments
 from .models import Course, CourseResource
 
 # Create your views here.
@@ -107,3 +108,25 @@ class CourseCommentsView(View):
             'course': course,
             'all_resources': all_resources,
         })
+
+class AddCommentView(View):
+    '''课程添加评论View'''
+    def post(self, request):
+        # 先判断用户登录状态
+        if not request.user.is_authenticated():
+            return HttpResponse('{"status": "fail", "msg": "用户未登录"}',
+                                content_type="application/json")
+        course_id = int(request.POST.get("course_id", 0))
+        comment = request.POST.get("comments", "")
+
+        if course_id > 0 and comment:
+            # get是有可能抛出异常的，filter不会
+            course = Course.objects.get(id=course_id)
+            course_comment = CourseComments(course=course, comments=comment,
+                                            user=request.user)
+            course_comment.save()
+            return HttpResponse('{"status": "success", "msg": "添加成功"}',
+                                content_type="application/json")
+        else:
+            return HttpResponse('{"status": "fail", "msg": "添加失败"}',
+                                content_type="application/json")
