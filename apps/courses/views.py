@@ -90,6 +90,12 @@ class CourseInfoView(LoginRequiredMixin, View):
     def get(self, request, course_id):
         course = get_object_or_404(Course, id=course_id)
 
+        # 查询用户是否已经关联了该课程
+        user_course = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_course:
+            # 如果UserCourse中没记录  就创建用户学习课程的记录
+            UserCourse.objects.create(user=request.user, course=course)
+
         ## 获取学过该课程的相关其它课程
         # 学习这课程的所有用户
         users_course =UserCourse.objects.filter(course=course)
@@ -122,10 +128,21 @@ class CourseCommentsView(LoginRequiredMixin, View):
 
         # 课程评论
         all_comments = CourseComments.objects.filter(course = course)
+
+        ## 获取学过该课程的相关其它课程
+        users_course = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in users_course]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids). \
+            exclude(course=course)
+        course_ids = [user_course.course.id for user_course in all_user_courses]
+        relate_courses = Course.objects.filter(id__in=course_ids). \
+                             order_by("-click_nums")[:5]
+
         return render(request, 'course_comment.html', {
             'course': course,
             'all_resources': all_resources,
             'all_comments': all_comments,
+            'relate_courses': relate_courses,
         })
 
 class AddCommentView(View):
