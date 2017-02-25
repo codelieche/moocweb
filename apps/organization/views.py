@@ -222,8 +222,23 @@ class TeacherDetialView(View):
         # 讲师排行榜
         sorted_teachers = Teacher.objects.all().order_by('-click_nums')[:5]
 
+        # 教师和机构是否已经收藏
+        has_teacher_faved = False
+        has_org_faved = False
+        # 查询是否收藏了教师
+        if UserFavorite.objects.filter(user=request.user,
+                                       fav_id=teacher_id, fav_type=3):
+            has_teacher_faved = True
+
+        # 查询机构是否收藏
+        if UserFavorite.objects.filter(user=request.user,
+                                       fav_id=teacher.org_id, fav_type=2):
+            has_org_faved = True
+
         return render(request, 'teacher_detail.html', {
             'teacher': teacher,
             'sorted_teachers': sorted_teachers,
             'all_courses': all_courses,
+            'has_teacher_faved': has_teacher_faved,
+            'has_org_faved': has_org_faved,
         })
