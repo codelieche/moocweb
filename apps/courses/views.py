@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import HttpResponse
 
 from operation.models import UserFavorite, CourseComments, UserCourse
@@ -26,6 +26,15 @@ class CourseListView(View):
             elif sort == "hot":
                 all_orgs = all_courses.order_by("-click_nums")
 
+        # 搜索关键词: 课程搜索
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            all_courses = all_courses.filter(
+                Q(name__icontains=search_keywords)|
+                Q(desc__icontains=search_keywords)|
+                Q(detail__icontains=search_keywords)
+            )
+
         # 对课程列表进行分页
         page_num = 1
         try:
@@ -44,6 +53,7 @@ class CourseListView(View):
             "page_num_list": range(1, p.num_pages + 1),
             'sort': sort,
             'hot_courses': hot_courses,
+            'search_keywords': search_keywords,
         })
 
 
