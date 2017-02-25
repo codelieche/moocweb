@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import View
 from django.core.paginator import Paginator
 from django.http import HttpResponse
+from django.db.models import Q
 
 from courses.models import Course
 from operation.models import UserFavorite
@@ -26,6 +27,15 @@ class OrgListView(View):
         category = request.GET.get("category", "")
         if category:
             all_orgs = all_orgs.filter(category=category)
+
+        # 搜索关键词: 机构搜索
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 根据机构名字、描述搜索
+            all_orgs = all_orgs.filter(
+                Q(name__icontains=search_keywords) |
+                Q(desc__icontains=search_keywords)
+            )
 
         # 排序 students courses
         sort = request.GET.get('sort', '')
@@ -184,6 +194,16 @@ class TeacherListView(View):
     '''讲师列表页View'''
     def get(self, request):
         all_teacher = Teacher.objects.all()
+
+        # 搜索关键词: 讲师搜索
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # 根据讲师名字、公司、职位搜索
+            all_teacher = all_teacher.filter(
+                Q(name__icontains=search_keywords) |
+                Q(work_company__icontains=search_keywords) |
+                Q(work_position__icontains=search_keywords)
+            )
 
         # 对讲师排序
         sort = request.GET.get('sort', '')

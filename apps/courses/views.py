@@ -29,6 +29,7 @@ class CourseListView(View):
         # 搜索关键词: 课程搜索
         search_keywords = request.GET.get('keywords', '')
         if search_keywords:
+            # 根据课程名字、描述、详情搜索
             all_courses = all_courses.filter(
                 Q(name__icontains=search_keywords)|
                 Q(desc__icontains=search_keywords)|
