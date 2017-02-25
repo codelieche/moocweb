@@ -50,6 +50,7 @@ class Teacher(models.Model):
     name = models.CharField(max_length=50, verbose_name="教师名")
     image = models.ImageField(upload_to="teacher/%Y/%m", verbose_name="头像",
                               max_length=100, storage=ImageStorage())
+    age = models.IntegerField(default=0, verbose_name="年龄")
     work_years = models.IntegerField(default=0, verbose_name="工作年限")
     work_company = models.CharField(max_length=50, verbose_name="就职公司")
     work_position = models.CharField(max_length=50, verbose_name="公司职位")
@@ -78,5 +79,3 @@ class CityDict(models.Model):
     class Meta:
         verbose_name = "城市"
         verbose_name_plural = verbose_name
-
-

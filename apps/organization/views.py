@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from courses.models import Course
 from operation.models import UserFavorite
 
-from .models import CourseOrg, CityDict
+from .models import CourseOrg, CityDict, Teacher
 from .forms import UserAskForm
 
 # Create your views here.
@@ -178,3 +178,35 @@ class  AddFavView(View):
                 else:
                     return HttpResponse('{"status": "fail", "msg": "收藏出错"}',
                                         content_type="application/json")
+
+
+class TeacherListView(View):
+    '''讲师列表页View'''
+    def get(self, request):
+        all_teacher = Teacher.objects.all()
+
+        # 对讲师排序
+        sort = request.GET.get('sort', '')
+        if sort:
+            if sort == "hot":
+                all_teacher = all_teacher.order_by('-click_nums')
+
+        # 对讲师列表分页
+        page_num = 1
+        try:
+            page_num = int(request.GET.get('page', '1'))
+        except Exception:
+            page_num = 1
+        p = Paginator(all_teacher, 3)
+        teachers = p.page(page_num)
+
+        # 讲师排行榜
+        sorted_teachers = Teacher.objects.all().order_by('-click_nums')[:5]
+
+        return render(request, 'teachers_list.html',{
+            'all_teachers': teachers,
+            'teacher_nums': p.count,
+            'page_num_list': range(1, p.num_pages + 1),
+            'sort': sort,
+            'sorted_teachers': sorted_teachers,
+        })

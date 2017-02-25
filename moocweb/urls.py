@@ -37,6 +37,8 @@ urlpatterns = [
     url(r'^org/', include('organization.urls', namespace="org")),
     # 课程相关url的配置
     url(r'^course/', include('courses.urls', namespace='course')),
+    # 讲师相关url配置
+    url(r'^teacher/', include('organization.teacher_url', namespace='teacher')) ,
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
