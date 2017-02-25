@@ -1,5 +1,5 @@
 # _*_ coding:utf-8 _*_
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import View
 from django.core.paginator import Paginator
 from django.http import HttpResponse
@@ -209,4 +209,21 @@ class TeacherListView(View):
             'page_num_list': range(1, p.num_pages + 1),
             'sort': sort,
             'sorted_teachers': sorted_teachers,
+        })
+
+class TeacherDetialView(View):
+    '''讲师详情页View'''
+    def get(self, request, teacher_id):
+        teacher = get_object_or_404(Teacher, id=teacher_id)
+
+        # 讲师的课程
+        all_courses = teacher.course_set.all()
+
+        # 讲师排行榜
+        sorted_teachers = Teacher.objects.all().order_by('-click_nums')[:5]
+
+        return render(request, 'teacher_detail.html', {
+            'teacher': teacher,
+            'sorted_teachers': sorted_teachers,
+            'all_courses': all_courses,
         })
