@@ -5,12 +5,14 @@ from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 from django.views.generic.base import View
 from django.contrib.auth.hashers import mask_hash
+from django.http import HttpResponse
 
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 
 from .models import UserProfile, EmailVerifyRecord
-from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ModifyPasswordForm
+from .forms import LoginForm, RegisterForm, ForgetPasswordForm,\
+    ModifyPasswordForm, UploadImageForm
 
 
 # Create your views here.
@@ -175,4 +177,21 @@ class UserInfoView(LoginRequiredMixin, View):
         return render(request, 'usercenter_info.html', {
 
         })
+
+class UploadImageView(LoginRequiredMixin, View):
+    '''用户修改头像图片View'''
+    def post(self, request):
+        # 与以前的post数据有差异哦: 需要加个request.FILES
+        image_form = UploadImageForm(request.POST, request.FILES, instance=request.user)
+
+        if image_form.is_valid():
+            # request.user.image = image_form.cleaned_data['image']
+            # request.user.save()
+            # ModelForm可以直接保存
+            image_form.save()
+            return HttpResponse('{"status": "success", "msg": "上传成功"}',
+                                content_type="application/json")
+        else:
+            return HttpResponse('{"status": "fail", "msg": "上传失败"}',
+                                content_type="application/json")
 
