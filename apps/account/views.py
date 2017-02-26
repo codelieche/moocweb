@@ -1,6 +1,5 @@
 # _*_ coding:utf-8 _*_
 import json
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import  authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
@@ -8,10 +7,12 @@ from django.db.models import Q
 from django.views.generic.base import View
 from django.contrib.auth.hashers import mask_hash
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
-from operation.models import UserCourse, UserFavorite
+
+from operation.models import UserCourse, UserFavorite, UserMessage
 
 from organization.models import CourseOrg, Teacher
 from courses.models import Course
@@ -314,4 +315,25 @@ class MyFavCourseView(LoginRequiredMixin, View):
 
         return render(request, 'usercenter/fav_course.html', {
             'course_list': course_list,
+        })
+
+class MyMessageView(LoginRequiredMixin, View):
+    '''我的消息View'''
+    def get(self, request):
+        # UserMessage的user字段是0或者user.id，0是系统消息
+        all_message = UserMessage.objects.filter(user__in=[0, request.user.id])
+
+        # 对信息进行分页
+        p = Paginator(all_message, 5)
+        page_num = 1
+        try:
+            page_num = int(request.GET.get('page', '1'))
+        except Exception:
+            page_num = 1
+
+        messages = p.page(page_num)
+
+        return render(request, 'usercenter/message.html', {
+            'messages': messages,
+            'page_num_list': range(1, p.num_pages + 1),
         })
