@@ -26,8 +26,8 @@ class ForgetPasswordForm(forms.Form):
 
 class ModifyPasswordForm(forms.Form):
     '''修改密码Form'''
-    email = forms.EmailField(max_length=50, required=True)
-    password = forms.CharField(required=True, min_length=5)
+    # email = forms.EmailField(max_length=50, required=True)
+    password1 = forms.CharField(required=True, min_length=5)
     password2 = forms.CharField(required=True, min_length=5)
 
 class UploadImageForm(forms.ModelForm):

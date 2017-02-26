@@ -1,4 +1,6 @@
 # _*_ coding:utf-8 _*_
+import json
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import  authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
@@ -148,8 +150,8 @@ class ModifyPasswordView(View):
     def post(self, request):
         modify_form = ModifyPasswordForm(request.POST)
         if modify_form.is_valid():
-            email = modify_form.cleaned_data['email']
-            password = modify_form.cleaned_data['password']
+            email = request.POST.get('email', "")
+            password = modify_form.cleaned_data['password1']
             password2 = modify_form.cleaned_data['password2']
             if password == password2:
                 user = UserProfile.objects.get(email=email)
@@ -195,3 +197,23 @@ class UploadImageView(LoginRequiredMixin, View):
             return HttpResponse('{"status": "fail", "msg": "上传失败"}',
                                 content_type="application/json")
 
+class UpdatePasswordView(View):
+    '''修改密码View'''
+    def post(self, request):
+        modify_form = ModifyPasswordForm(request.POST)
+        if modify_form.is_valid():
+            pwd1 = request.POST.get('password1', "")
+            pwd2 = request.POST.get('password2', "")
+
+            if pwd1 != pwd2:
+                return HttpResponse('{"status":"fail","msg":"密码不一致"}',
+                                    content_type="application/json")
+            user = request.user
+            user.set_password(pwd1)
+            user.save()
+            return HttpResponse('{"status":"success","msg":"修改完成"}',
+                                    content_type="application/json")
+
+        else:
+            return HttpResponse(json.dumps(modify_form.errors),
+                                content_type="application/json")

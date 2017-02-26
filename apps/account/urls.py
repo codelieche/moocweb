@@ -10,4 +10,7 @@ urlpatterns = [
     url('^home/$', views.UserInfoView.as_view(), name='home'),
     # 用户上传头像图片
     url('^image/upload/$', views.UploadImageView.as_view(), name='image_upload'),
+    # 修改密码
+    url('^update/pwd/', views.UpdatePasswordView.as_view(), name="update_pwd"),
+
 ]
