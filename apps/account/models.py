@@ -8,6 +8,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from utils.storage import ImageStorage
 
+
 # Create your models here.
 
 
@@ -33,6 +34,12 @@ class UserProfile(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def get_unread_message_nums(self):
+        '''获取用户未读消息个数'''
+        from operation.models import UserMessage
+        messages = UserMessage.objects.filter(user=self.id).count()
+        return messages
 
 @python_2_unicode_compatible
 class EmailVerifyRecord(models.Model):

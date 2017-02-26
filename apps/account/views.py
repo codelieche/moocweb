@@ -94,6 +94,10 @@ class RegisterView(View):
             # 发送验证邮件
             send_register_email(email, "register")
             # login(request, user_profile)
+
+            # 写入注册信息
+            UserMessage.objects.create(user=user_profile.id,
+                                       message="欢迎注册mooc在线")
             return render(request, 'login.html')
 
         else:
@@ -165,6 +169,11 @@ class ModifyPasswordView(View):
                     user.save()
                     # 登陆且跳转到首页
                     # login(request, user)
+
+                    # 写入信息：成功重置密码
+                    msg = "{0}成功重置密码".format(user.nick_name)
+                    UserMessage.objects.create(user=user.id, message=msg)
+
                     return redirect('login')
                 else:
                     return render(request, 'password_reset.html',
@@ -227,6 +236,11 @@ class UpdatePasswordView(View):
             user = request.user
             user.set_password(pwd1)
             user.save()
+
+            # 写入信息：成功修改密码
+            msg = "{0}成功修改密码".format(user.nick_name)
+            UserMessage.objects.create(user=user.id, message=msg)
+
             return HttpResponse('{"status":"success","msg":"修改完成"}',
                                     content_type="application/json")
 
@@ -321,7 +335,8 @@ class MyMessageView(LoginRequiredMixin, View):
     '''我的消息View'''
     def get(self, request):
         # UserMessage的user字段是0或者user.id，0是系统消息
-        all_message = UserMessage.objects.filter(user__in=[0, request.user.id])
+        all_message = UserMessage.objects.filter(user__in=[0, request.user.id]).\
+            order_by('-add_time')
 
         # 对信息进行分页
         p = Paginator(all_message, 5)
