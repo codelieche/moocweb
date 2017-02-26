@@ -11,6 +11,7 @@ from django.http import HttpResponse
 
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
+from operation.models import UserCourse
 
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetPasswordForm,\
@@ -259,3 +260,17 @@ class UpdateEmailView(LoginRequiredMixin, View):
         else:
             return HttpResponse('{"status":"fail", "email": "验证码错误"}',
                                 content_type="application/json")
+
+class MyCourseView(LoginRequiredMixin, View):
+    '''
+    我的课程View
+    '''
+    def get(self, request):
+        # 取出用户的所有课程
+        user_courses = UserCourse.objects.filter(user=request.user)
+        # 课程列表在UserCourse对象的course字段
+        user_courses = [i.course for i in user_courses]
+        
+        return render(request, 'usercenter_mycourse.html', {
+            'user_courses': user_courses,
+        })

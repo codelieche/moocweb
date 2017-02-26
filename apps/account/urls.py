@@ -16,5 +16,8 @@ urlpatterns = [
     url('^sendemail_code/$', views.SendEmailCodeView.as_view(), name="sendemail_code"),
     # 更新email
     url('^update/email/$', views.UpdateEmailView.as_view(), name="update_email"),
+    # 我的课程
+    url('^mycourse/$', views.MyCourseView.as_view(), name="mycourse"),
+
 
 ]
