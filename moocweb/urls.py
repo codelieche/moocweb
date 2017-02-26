@@ -39,6 +39,8 @@ urlpatterns = [
     url(r'^course/', include('courses.urls', namespace='course')),
     # 讲师相关url配置
     url(r'^teacher/', include('organization.teacher_url', namespace='teacher')) ,
+    # 用户中心url配置
+    url(r'^user/', include('account.urls', namespace='user')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

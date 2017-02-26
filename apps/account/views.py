@@ -7,6 +7,8 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import mask_hash
 
 from utils.email_send import send_register_email
+from utils.mixin_utils import LoginRequiredMixin
+
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ModifyPasswordForm
 
@@ -166,5 +168,11 @@ class ModifyPasswordView(View):
                           {'email': request.POST.get('email', ''),
                            'msg': '请重新输入'})
 
+class UserInfoView(LoginRequiredMixin, View):
+    '''用户个人信息View'''
+    # 需要登陆才可以进入用户中心
+    def get(self, request):
+        return render(request, 'usercenter_info.html', {
 
+        })
 
