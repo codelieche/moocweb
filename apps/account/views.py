@@ -14,7 +14,7 @@ from utils.mixin_utils import LoginRequiredMixin
 
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetPasswordForm,\
-    ModifyPasswordForm, UploadImageForm
+    ModifyPasswordForm, UploadImageForm, UserInfoForm
 
 
 # Create your views here.
@@ -179,6 +179,17 @@ class UserInfoView(LoginRequiredMixin, View):
         return render(request, 'usercenter_info.html', {
 
         })
+
+    def post(self, request):
+        # 是修改所以要传入instance对象
+        user_info_form = UserInfoForm(request.POST, instance=request.user)
+        if user_info_form.is_valid():
+            user_info_form.save()
+            return HttpResponse('{"status": "success", "msg": "修改成功"}',
+                                content_type="application/json")
+        else:
+            return HttpResponse(json.dumps(user_info_form.errors),
+                                content_type="application/json")
 
 class UploadImageView(LoginRequiredMixin, View):
     '''用户修改头像图片View'''
