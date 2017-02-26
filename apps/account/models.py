@@ -39,11 +39,12 @@ class EmailVerifyRecord(models.Model):
     '''邮箱验证Model'''
     EMAIL_SEND_TYPE = (
         ('register', '注册'),
-        ('forget', '找回密码')
+        ('forget', '找回密码'),
+        ('update_email', '修改邮箱')
     )
     code = models.CharField(max_length=20, verbose_name='验证码')
     email = models.EmailField(max_length=50, verbose_name="邮箱")
-    send_type = models.CharField(max_length=10, choices=EMAIL_SEND_TYPE,
+    send_type = models.CharField(max_length=15, choices=EMAIL_SEND_TYPE,
                                  verbose_name="验证码类型")
     send_time = models.DateTimeField(default=datetime.now, verbose_name="发送时间")
 

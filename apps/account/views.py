@@ -217,3 +217,34 @@ class UpdatePasswordView(View):
         else:
             return HttpResponse(json.dumps(modify_form.errors),
                                 content_type="application/json")
+
+class SendEmailCodeView(LoginRequiredMixin, View):
+    '''发送邮箱验证码'''
+    def get(self, request):
+        email = request.GET.get('email', '')
+        # email必须是个未注册的邮箱
+        if UserProfile.objects.filter(email=email):
+            return HttpResponse('{"email":"邮箱已经存在"}',
+                                content_type="application/json")
+        else:
+            # 发送update邮箱验证码
+            send_register_email(email, "update_email")
+            return HttpResponse('{"status":"success"}',
+                                content_type="application/json")
+
+class UpdateEmailView(LoginRequiredMixin, View):
+    '''更新邮箱View'''
+    def post(self, request):
+        email = request.POST.get('email', '')
+        code = request.POST.get('code', '')
+        existed_records = EmailVerifyRecord.objects.filter(email=email, code=code,
+                                                      send_type="update_email")
+        if existed_records:
+            user = request.user
+            user.email = email
+            user.save()
+            return HttpResponse('{"status":"success"}',
+                                content_type="application/json")
+        else:
+            return HttpResponse('{"status":"fail", "email": "验证码错误"}',
+                                content_type="application/json")

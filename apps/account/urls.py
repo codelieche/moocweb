@@ -12,5 +12,9 @@ urlpatterns = [
     url('^image/upload/$', views.UploadImageView.as_view(), name='image_upload'),
     # 修改密码
     url('^update/pwd/', views.UpdatePasswordView.as_view(), name="update_pwd"),
+    # 发送修改邮箱验证码
+    url('^sendemail_code/$', views.SendEmailCodeView.as_view(), name="sendemail_code"),
+    # 更新email
+    url('^update/email/$', views.UpdateEmailView.as_view(), name="update_email"),
 
 ]
