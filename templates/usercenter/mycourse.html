@@ -1,4 +1,4 @@
-{% extends 'usercenter_base.html' %}
+{% extends 'usercenter/base.html' %}
 {% block title %}我的课程- mooc在线{% endblock %}
 
 {% block custom_bread %}
@@ -30,7 +30,7 @@
                                 <img width="214" height="190" class="scrollLoading" src="/media/{{ course.image }}"/>
                             </a>
                             <div class="des">
-                                <a href="{% url 'course:course_info' course.id %}"><h2>{{ course.name }}</h2></a>
+                                <a href="{% url 'course:course_detail' course.id %}"><h2>{{ course.name }}</h2></a>
                                 <span class="fl">课时：<i class="key">{{ course.learn_times }}</i></span>
                                 <span class="fr">学习人数：{{ course.students }}</span>
                             </div>

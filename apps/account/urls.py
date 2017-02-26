@@ -18,6 +18,11 @@ urlpatterns = [
     url('^update/email/$', views.UpdateEmailView.as_view(), name="update_email"),
     # 我的课程
     url('^mycourse/$', views.MyCourseView.as_view(), name="mycourse"),
-
+    # 我的收藏:机构
+    url('^myfav/org/$', views.MyFavOrgView.as_view(), name="my_fav_org"),
+    # 我的收藏:讲师
+    url('^myfav/teacher/$', views.MyFavTeacherView.as_view(), name="my_fav_teacher"),
+    # 我的收藏:课程
+    url('^myfav/course/$', views.MyFavCourseView.as_view(), name="my_fav_course"),
 
 ]
